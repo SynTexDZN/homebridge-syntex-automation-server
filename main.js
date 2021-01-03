@@ -1,4 +1,4 @@
-const http = require('http'), url = require('url');
+const http = require('http'), url = require('url'), logger = require('syntex-logger');
 
 const pluginID = 'homebridge-syntex-automation-server';
 const pluginName = 'SynTexAutomationServer';
@@ -42,13 +42,13 @@ class SynTexAutomationServer
             
             if(urlPath == '/')
             {
-                respomse.write('Hello');
+                response.write('Hello');
                 response.end();
             }
 		};
 
 		http.createServer(createServerCallback).listen(this.port, '0.0.0.0');
 		
-		this.logger.log('info', 'bridge', 'Bridge', pluginName + ' %port_running% [' + this.port + ']');
+		this.logger.log('info', 'bridge', 'Bridge', 'SynTex Automation %port_running% [' + this.port + ']');
     }
 }
