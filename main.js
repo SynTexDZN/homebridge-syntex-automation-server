@@ -1,4 +1,4 @@
-const http = require('http'), url = require('url'), logger = require('syntex-logger');
+const http = require('http'), url = require('url'), store = require('json-fs-store'), logger = require('syntex-logger');
 
 const pluginID = 'homebridge-syntex-automation-server';
 const pluginName = 'SynTexAutomationServer';
@@ -9,15 +9,39 @@ class SynTexAutomationServer
 {
 	constructor(log, config, api)
 	{
-        //this.cacheDirectory = config['cacheDirectory'];
+        this.cacheDirectory = config['cacheDirectory'];
 		this.logDirectory = config['logDirectory'];
 		this.port = config['port'] || 1777;
 		this.debug = config['debug'] || false;
-		this.language = config['language'] || 'en';
+        this.language = config['language'] || 'en';
+        
+        this.storage = store(this.cacheDirectory);
 
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
-        this.initWebServer();
+        this.loadAutomation().then(() => this.initWebServer());
+    }
+
+    loadAutomation()
+    {
+        return new Promise((resolve) => {
+			
+			this.storage.load('automation', (err, obj) => {  
+
+				if(!obj || err)
+				{
+					this.automation = [];
+				}
+				else
+				{
+					this.automation = obj.automation;
+                }
+
+                console.log(this.automation);
+                
+                resolve();
+			});
+		});
     }
 
     initWebServer()
@@ -43,6 +67,19 @@ class SynTexAutomationServer
             if(urlPath == '/')
             {
                 response.write('Hello');
+                response.end();
+            }
+            else if(urlPath == '/update-automation')
+            {
+                if(urlParams.id != null)
+                {
+                    response.write('Success');
+                }
+                else
+                {
+                    response.write('Du hast keine ID angegeben!');
+                }
+                
                 response.end();
             }
 		};
