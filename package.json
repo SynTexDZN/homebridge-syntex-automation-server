@@ -1,0 +1,36 @@
+{
+	"name": "homebridge-syntex-automation-server",
+	"version": "1.0.0",
+	"description": "The automation system server for your smart home",
+	"main": "main.js",
+	"author": "SynTexDZN",
+	"engines": {
+		"homebridge": ">=0.3.0",
+		"node": ">=9.11.2"
+	},
+	"dependencies": {
+		"json-fs-store": "^1.0.1",
+		"request": "^2.88.0",
+		"syntex-logger": "^1.0.2"
+	},
+	"keywords": [
+		"syntex",
+		"homebridge-syntex-automation-server",
+		"plugin",
+		"http",
+		"automation",
+		"server"
+	],
+	"homepage": "https://github.com/SynTexDZN/homebridge-syntex-automation-server#readme",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/SynTexDZN/homebridge-syntex-automation-server.git"
+	},
+	"bugs": {
+		"url": "https://github.com/SynTexDZN/homebridge-syntex-automation-server/issues"
+	},
+	"license": "ISC",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
+}
