@@ -80,7 +80,7 @@ class SynTexAutomationServer
 
                     DataManager.updateValues(urlParams.id, urlParams.letters, values);
 
-                    AutomationSystem.runAutomation(urlParams.id, urlParams.letters, values);
+                    AutomationSystem.LogikEngine.runAutomation(urlParams.id, urlParams.letters, values);
 
                     response.write('Success');
                 }
