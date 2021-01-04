@@ -1,3 +1,5 @@
+let AutomationSystem = require('./automations'), DataManager = require('./data-manager');
+
 const http = require('http'), url = require('url'), store = require('json-fs-store'), logger = require('syntex-logger');
 
 const pluginID = 'homebridge-syntex-automation-server';
@@ -19,7 +21,13 @@ class SynTexAutomationServer
 
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
-        this.loadAutomation().then(() => this.initWebServer());
+        this.loadAutomation().then(() => {
+
+            DataManager = new DataManager();
+            AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, this.automation, DataManager);
+
+            this.initWebServer();
+        });
     }
 
     loadAutomation()
@@ -37,8 +45,6 @@ class SynTexAutomationServer
 					this.automation = obj.automation;
                 }
 
-                console.log(this.automation);
-                
                 resolve();
 			});
 		});
@@ -71,13 +77,47 @@ class SynTexAutomationServer
             }
             else if(urlPath == '/update-automation')
             {
-                if(urlParams.id != null)
+                if(urlParams.id != null && urlParams.letters != null)
                 {
+                    var values = {};
+
+                    if(urlParams.value != null)
+                    {
+                        values.value = urlParams.value;
+                    }
+
+                    if(urlParams.hue != null)
+                    {
+                        values.hue = urlParams.hue;
+                    }
+
+                    if(urlParams.saturation != null)
+                    {
+                        values.saturation = urlParams.saturation;
+                    }
+
+                    if(urlParams.brightness != null)
+                    {
+                        values.brightness = urlParams.brightness;
+                    }
+
+                    DataManager.updateValues(urlParams.id, urlParams.letters, values);
+
+                    AutomationSystem.runAutomation(urlParams.id, urlParams.letters, values);
+
                     response.write('Success');
                 }
-                else
+                else if(urlParams.id == null)
                 {
                     response.write('Du hast keine ID angegeben!');
+                }
+                else if(urlParams.letters == null)
+                {
+                    response.write('Du hast keine Letters angegeben!');
+                }
+                else if(urlParams.value == null)
+                {
+                    response.write('Du hast keine Value angegeben!');
                 }
                 
                 response.end();
