@@ -1,6 +1,6 @@
 {
 	"name": "homebridge-syntex-automation-server",
-	"version": "1.0.1-b3",
+	"version": "1.0.1-b4",
 	"description": "The automation system server for your smart home",
 	"main": "main.js",
 	"author": "SynTexDZN",
