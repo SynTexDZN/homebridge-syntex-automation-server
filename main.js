@@ -1,4 +1,4 @@
-let AutomationSystem = require('./automations'), DataManager = require('./data-manager');
+let AutomationSystem = require('syntex-automation'), DataManager = require('./data-manager');
 
 const http = require('http'), url = require('url'), store = require('json-fs-store'), logger = require('syntex-logger');
 
@@ -21,33 +21,10 @@ class SynTexAutomationServer
 
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
-        this.loadAutomation().then(() => {
+        DataManager = new DataManager();
+        AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, DataManager);
 
-            DataManager = new DataManager();
-            AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, this.automation, DataManager);
-
-            this.initWebServer();
-        });
-    }
-
-    loadAutomation()
-    {
-        return new Promise((resolve) => {
-			
-			this.storage.load('automation', (err, obj) => {  
-
-				if(!obj || err)
-				{
-					this.automation = [];
-				}
-				else
-				{
-					this.automation = obj.automation;
-                }
-
-                resolve();
-			});
-		});
+        this.initWebServer();
     }
 
     initWebServer()
