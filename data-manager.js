@@ -5,7 +5,7 @@ module.exports = class DataManager
         this.data = {};
     }
 
-    readValues(id, letters)
+    readAccessoryService(id, letters)
     {
         if(this.data != null
             && this.data[id] != null)
