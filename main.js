@@ -22,7 +22,7 @@ class SynTexAutomationServer
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
         DataManager = new DataManager();
-        AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, DataManager);
+        AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, DataManager, true);
 
         this.initWebServer();
     }
@@ -80,7 +80,7 @@ class SynTexAutomationServer
 
                     DataManager.updateValues(urlParams.id, urlParams.letters, values);
 
-                    //AutomationSystem.LogikEngine.runAutomation(urlParams.id, urlParams.letters, values.value);
+                    AutomationSystem.LogikEngine.runAutomation(urlParams.id, urlParams.letters, values.value);
 
                     response.write('Success');
                 }
