@@ -11,18 +11,18 @@ class SynTexAutomationServer
 {
 	constructor(log, config, api)
 	{
-        this.cacheDirectory = config['cacheDirectory'];
 		this.logDirectory = config['logDirectory'];
 		this.port = config['port'] || 1777;
 		this.debug = config['debug'] || false;
         this.language = config['language'] || 'en';
+        this.automationDirectory = config['automationDirectory'];
         
-        this.storage = store(this.cacheDirectory);
+        this.storage = store(this.automationDirectory);
 
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
         DataManager = new DataManager();
-        AutomationSystem = new AutomationSystem(this.logger, this.cacheDirectory, DataManager, true);
+        AutomationSystem = new AutomationSystem(this.logger, this.automationDirectory, DataManager, true);
 
         this.initWebServer();
     }
