@@ -1,8 +1,27 @@
+const store = require('json-fs-store');
+
 module.exports = class DataManager
 {
-    constructor()
+    constructor(storagePath)
     {
         this.data = {};
+
+        if(storagePath != null)
+        {
+            this.storage = store(storagePath);
+
+            this.storage.load('data', (err, obj) => {
+
+                if(!obj || err)
+                {
+                    logger.log('error', 'bridge', 'Bridge', 'Data.json %read_error%! ' + err);
+                }
+                else
+                {
+                    this.data = obj.data;
+                }
+            });
+        }
     }
 
     readAccessoryService(id, letters)
@@ -35,6 +54,19 @@ module.exports = class DataManager
             this.data[id][letters][value] = values[value];
         }
 
+        this.saveValues();
+
         console.log('SAVED VALUES', values);
+    }
+
+    saveValues()
+    {
+        this.storage.add({ id : 'data', data : this.data }, (err) => {
+
+            if(err)
+            {
+                logger.log('error', 'bridge', 'Bridge', 'Data.json %update_error%! ' + err);
+            }
+        });
     }
 }

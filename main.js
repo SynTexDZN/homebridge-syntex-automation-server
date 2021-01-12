@@ -21,8 +21,8 @@ class SynTexAutomationServer
 
         this.logger = new logger('SynTexAutomationServer', this.logDirectory, this.debug, this.language);
         
-        DataManager = new DataManager();
-        AutomationSystem = new AutomationSystem(this.logger, this.automationDirectory, DataManager, true);
+        DataManager = new DataManager(this.automationDirectory);
+        AutomationSystem = new AutomationSystem(this.logger, this.automationDirectory, DataManager, pluginName, true);
 
         this.initWebServer();
     }
